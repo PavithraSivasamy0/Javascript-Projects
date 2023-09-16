@@ -69,7 +69,7 @@ const displayMovements = function (movements, sort = false) {
     <div class="movements__type movements__type--${type}">${
       index + 1
     } ${type}</div>
-    <div class="movements__value">${movement}€</div>
+    <div class="movements__value">${movement.toFixed(2)}€</div>
   </div>`;
     containerMovements.insertAdjacentHTML('afterbegin', html);
   });
@@ -80,26 +80,26 @@ const calcGlobalBalance = function (account) {
     (acc, curr) => acc + curr,
     0
   );
-  labelBalance.textContent = `${account.globalBalance}EUR`;
+  labelBalance.textContent = `${account.globalBalance.toFixed(2)}EUR`;
 };
 
 const calcDisplaySummary = function (account) {
   const incomes = account.movements
     .filter(mov => mov > 0)
     .reduce((acc, cur) => acc + cur, 0);
-  labelSumIn.textContent = `${incomes}E`;
+  labelSumIn.textContent = `${incomes.toFixed(2)}E`;
 
   const withdrawal = account.movements
     .filter(mov => mov < 0)
     .reduce((acc, cur) => acc + cur, 0);
-  labelSumOut.textContent = `${Math.abs(withdrawal)}E`;
+  labelSumOut.textContent = `${Math.abs(withdrawal).toFixed(2)}E`;
 
   const interest = account.movements
     .filter(mov => mov > 0)
     .map(mov => (mov * account.interestRate) / 100)
     .filter(int => int >= 1)
     .reduce((acc, cur) => acc + cur, 0);
-  labelSumInterest.textContent = `${interest}E`;
+  labelSumInterest.textContent = `${interest.toFixed(2)}E`;
 };
 
 // getting user name
@@ -178,9 +178,13 @@ btnLoan.addEventListener('click', e => {
   const isThereSuficientDeposit = currentAccount.movements.some(
     mov => mov > loanAmount * 0.1
   );
-  if (isThereSuficientDeposit) currentAccount.movements.push(loanAmount);
+  if (isThereSuficientDeposit) {
+    setTimeout(() => {
+      currentAccount.movements.push(loanAmount);
+      updateUI(currentAccount);
+    }, 3000);
+  }
   inputLoanAmount.value = '';
-  updateUI(currentAccount);
 });
 
 let isSorted = false;
@@ -273,19 +277,9 @@ totalAccountDeposits(accounts);
 // };
 
 // console.log(calcAverageHumanAge([5, 2, 4, 1, 15, 8, 3]));
-// /////////////////////////////////////////////////
-// /////////////////////////////////////////////////
-// // LECTURES
-
-// const currencies = new Map([
-//   ['USD', 'United States dollar'],
-//   ['EUR', 'Euro'],
-//   ['GBP', 'Pound sterling'],
-// ]);
 
 // const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 
-////////////
 const recommendedFood = function (dogs) {
   dogs.forEach(dog => (dog.recFood = dog.weight ** 0.75 * 28));
 };

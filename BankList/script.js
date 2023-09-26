@@ -121,7 +121,26 @@ const updateUI = function (curAcc) {
   calcDisplaySummary(curAcc);
 };
 
-let currentAccount;
+//auto reseting and logging out timmer
+const logoutTimer = function () {
+  const tickTick = function () {
+    const min = String(Math.trunc(time / 60)).padStart(2, 0);
+    const sec = String(time % 60).padStart(2, 0);
+    labelTimer.textContent = `${min}:${sec}`;
+    if (time === 0) {
+      clearInterval(timer);
+      labelWelcome.textContent = 'Log in to get started';
+      containerApp.style.opacity = 0;
+    }
+    time--;
+  };
+  let time = 100;
+  tickTick();
+  const timer = setInterval(tickTick, 1000);
+  return timer;
+};
+
+let currentAccount, timer;
 btnLogin.addEventListener('click', function (e) {
   e.preventDefault();
   currentAccount = accounts.find(
@@ -135,6 +154,13 @@ btnLogin.addEventListener('click', function (e) {
     inputLoginUsername.value = '';
     inputLoginPin.value = '';
     inputLoginPin.blur();
+    console.log(timer, 'timer return');
+
+    if (timer) {
+      clearInterval(timer);
+    }
+    timer = logoutTimer();
+
     updateUI(currentAccount);
   }
 });
@@ -156,6 +182,9 @@ btnTransfer.addEventListener('click', function (e) {
     inputTransferAmount.value = '';
     inputTransferTo.value = '';
     updateUI(currentAccount);
+
+    clearInterval(timer);
+    timer = logoutTimer();
   }
 });
 
@@ -182,6 +211,9 @@ btnLoan.addEventListener('click', e => {
     setTimeout(() => {
       currentAccount.movements.push(loanAmount);
       updateUI(currentAccount);
+
+      clearInterval(timer);
+      timer = logoutTimer();
     }, 3000);
   }
   inputLoanAmount.value = '';

@@ -44,3 +44,23 @@ document.querySelector('.btn--close-cookie').addEventListener('click', () => {
 });
 
 message.style.backgroundColor = '#37383d';
+
+//implementation of smooth scrolling for learn more button
+
+const buttonScrollTo = document.querySelector('.btn--scroll-to');
+const section1 = document.querySelector('#section--1');
+buttonScrollTo.addEventListener('click', () => {
+  const scrollCoords = section1.getBoundingClientRect();
+  // window.scrollTo(
+  //   scrollCoords.left + window.pageXOffset,
+  //   scrollCoords.top + window.pageYOffset
+  // );
+  // window.scrollTo({
+  //   left: scrollCoords.left + window.pageXOffset,
+  //   top: scrollCoords.top + window.pageYOffset,
+  //   behavior: 'smooth',
+  // });
+
+  //SUPPORT ONLY MODERN BROWSERS
+  section1.scrollIntoView({ behavior: 'smooth' });
+});

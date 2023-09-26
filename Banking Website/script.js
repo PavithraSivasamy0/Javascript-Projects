@@ -7,6 +7,11 @@ const modal = document.querySelector('.modal');
 const overlay = document.querySelector('.overlay');
 const btnCloseModal = document.querySelector('.btn--close-modal');
 const btnsOpenModal = document.querySelectorAll('.btn--show-modal');
+const buttonScrollTo = document.querySelector('.btn--scroll-to');
+const section1 = document.querySelector('#section--1');
+const headerElement = document.querySelector('.header');
+const message = document.createElement('div');
+//modal functionalities
 
 const openModal = function (e) {
   e.preventDefault();
@@ -32,23 +37,8 @@ document.addEventListener('keydown', function (e) {
   }
 });
 
-const headerElement = document.querySelector('.header');
-const message = document.createElement('div');
-message.classList.add('cookie-message');
-message.innerHTML =
-  'We use cookie for improved functionaliy <button class="btn btn--close-cookie">Got it!</button>';
-headerElement.append(message);
-
-document.querySelector('.btn--close-cookie').addEventListener('click', () => {
-  message.remove();
-});
-
-message.style.backgroundColor = '#37383d';
-
 //implementation of smooth scrolling for learn more button
 
-const buttonScrollTo = document.querySelector('.btn--scroll-to');
-const section1 = document.querySelector('#section--1');
 buttonScrollTo.addEventListener('click', () => {
   const scrollCoords = section1.getBoundingClientRect();
   // window.scrollTo(
@@ -64,3 +54,60 @@ buttonScrollTo.addEventListener('click', () => {
   //SUPPORT ONLY MODERN BROWSERS
   section1.scrollIntoView({ behavior: 'smooth' });
 });
+
+//working on page navigations
+
+/* document.querySelectorAll('.nav__link').forEach(el => {
+  el.addEventListener('click', e => {
+    e.preventDefault();
+    const id = el.getAttribute('href');
+    document.querySelector(id).scrollIntoView({ behavior: 'smooth' });
+  });
+}); */
+
+//event delegation
+document.querySelector('.nav__links').addEventListener('click', e => {
+  e.preventDefault();
+  if (e.target.classList.contains('nav__link')) {
+    const id = e.target.getAttribute('href');
+    document.querySelector(id).scrollIntoView({ behavior: 'smooth' });
+  }
+});
+
+//working on event bubbling
+
+/* const randomInt = (min, max) =>
+  Math.floor(Math.random() * (max - min + 1) + min);
+const randomColor = () =>
+  `rgb(${randomInt(0, 255)},${randomInt(0, 255)},${randomInt(0, 255)})`;
+
+document.querySelector('.nav__link').addEventListener('click', function (e) {
+  this.style.backgroundColor = randomColor();
+  console.log('navlink', e.target, e.currentTarget);
+  // e.stopPropagation();
+});
+document.querySelector('.nav__links').addEventListener('click', function (e) {
+  this.style.backgroundColor = randomColor();
+  console.log('links', e.target, e.currentTarget);
+});
+document.querySelector('.nav').addEventListener(
+  'click',
+  function (e) {
+    this.style.backgroundColor = randomColor();
+    console.log('nav', e.target, e.currentTarget);
+  },
+  false
+);
+ */
+//experiments during learning
+
+message.classList.add('cookie-message');
+message.innerHTML =
+  'We use cookie for improved functionaliy <button class="btn btn--close-cookie">Got it!</button>';
+headerElement.append(message);
+
+document.querySelector('.btn--close-cookie').addEventListener('click', () => {
+  message.remove();
+});
+
+message.style.backgroundColor = '#37383d';

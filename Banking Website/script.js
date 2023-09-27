@@ -138,6 +138,44 @@ tabContainer.addEventListener('click', e => {
     .classList.add('operations__content--active');
 });
 
+// nav menu fading implementation
+
+const navMenuFadingHandler = function (e, opacity) {
+  if (e.target.classList.contains('nav__link')) {
+    const clickedMenu = e.target;
+    const siblings = clickedMenu.closest('.nav').querySelectorAll('.nav__link');
+    const logo = clickedMenu.closest('.nav').querySelector('.nav__logo');
+    siblings.forEach(el => {
+      if (el !== clickedMenu) {
+        // el.style.opacity = opacity; only works for normal function but not for bind
+        el.style.opacity = this;
+      }
+    });
+    // logo.style.opacity = opacity;
+    logo.style.opacity = this;
+  }
+};
+
+const navLinkContainer = document.querySelector('.nav__links');
+const navLinks = document.querySelectorAll('.nav__link');
+const nav = document.querySelector('.nav');
+
+// this will not work, bcs addEventListener always expects a function, but here it is a function
+/* nav.addEventListener('mouseover', navMenuFadingHandler(0.5));
+nav.addEventListener('mouseout', navMenuFadingHandler(1)); */
+
+// way 1
+/* nav.addEventListener('mouseover', function (e) {
+  navMenuFadingHandler(e, 0.5);
+});
+nav.addEventListener('mouseout', function (e) {
+  navMenuFadingHandler(e, 1);
+}); */
+
+//way 2 using bind as bind always returns a copy of new function
+nav.addEventListener('mouseover', navMenuFadingHandler.bind(0.5));
+nav.addEventListener('mouseout', navMenuFadingHandler.bind(1));
+
 //experiments during learning
 
 /* message.classList.add('cookie-message');

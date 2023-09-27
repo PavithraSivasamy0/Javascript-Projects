@@ -99,9 +99,27 @@ document.querySelector('.nav').addEventListener(
   false
 );
  */
+
+// DOM traversal - downwards
+const h1 = document.querySelector('h1');
+console.log(h1.querySelectorAll('.highlight'));
+console.log(h1.childNodes);
+console.log(h1.children);
+h1.firstElementChild.style.color = 'white';
+h1.lastElementChild.style.color = 'red';
+
+// DOM traversal - upwards
+console.log(h1.parentElement);
+console.log(h1.parentNode);
+h1.closest('.header').style.background = 'var(--gradient-secondary)';
+
+//DOM traversal - sideways siblings
+console.log(h1.previousElementSibling);
+console.log(h1.nextElementSibling);
+console.log(h1.parentElement.children);
 //experiments during learning
 
-message.classList.add('cookie-message');
+/* message.classList.add('cookie-message');
 message.innerHTML =
   'We use cookie for improved functionaliy <button class="btn btn--close-cookie">Got it!</button>';
 headerElement.append(message);
@@ -110,4 +128,4 @@ document.querySelector('.btn--close-cookie').addEventListener('click', () => {
   message.remove();
 });
 
-message.style.backgroundColor = '#37383d';
+message.style.backgroundColor = '#37383d'; */

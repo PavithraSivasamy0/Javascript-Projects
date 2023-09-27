@@ -101,7 +101,7 @@ document.querySelector('.nav').addEventListener(
  */
 
 // DOM traversal - downwards
-const h1 = document.querySelector('h1');
+/* const h1 = document.querySelector('h1');
 console.log(h1.querySelectorAll('.highlight'));
 console.log(h1.childNodes);
 console.log(h1.children);
@@ -116,7 +116,28 @@ h1.closest('.header').style.background = 'var(--gradient-secondary)';
 //DOM traversal - sideways siblings
 console.log(h1.previousElementSibling);
 console.log(h1.nextElementSibling);
-console.log(h1.parentElement.children);
+console.log(h1.parentElement.children); */
+
+//Implementing tab component
+const tabs = document.querySelectorAll('.operations__tab');
+const tabContainer = document.querySelector('.operations__tab-container');
+const tabContents = document.querySelectorAll('.operations__content');
+
+tabContainer.addEventListener('click', e => {
+  const clickedTab = e.target.closest('.operations__tab');
+  if (!clickedTab) return;
+  tabs.forEach(el => {
+    el.classList.remove('operations__tab--active');
+  });
+  clickedTab.classList.add('operations__tab--active');
+  tabContents.forEach(el => {
+    el.classList.remove('operations__content--active');
+  });
+  document
+    .querySelector(`.operations__content--${clickedTab.dataset.tab}`)
+    .classList.add('operations__content--active');
+});
+
 //experiments during learning
 
 /* message.classList.add('cookie-message');

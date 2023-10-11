@@ -140,7 +140,7 @@ tabContainer.addEventListener('click', e => {
 
 // nav menu fading implementation
 
-const navMenuFadingHandler = function (e, opacity) {
+const navMenuFadingHandler = function (e, _opacity) {
   if (e.target.classList.contains('nav__link')) {
     const clickedMenu = e.target;
     const siblings = clickedMenu.closest('.nav').querySelectorAll('.nav__link');
@@ -172,9 +172,62 @@ nav.addEventListener('mouseout', function (e) {
   navMenuFadingHandler(e, 1);
 }); */
 
-//way 2 using bind as bind always returns a copy of new function
+//way 2 using bind as bind always returns a copy of function which gets called on
 nav.addEventListener('mouseover', navMenuFadingHandler.bind(0.5));
 nav.addEventListener('mouseout', navMenuFadingHandler.bind(1));
+
+//implementing sticky nav bar using wuindows scroll events
+/* const initialCoords = section1.getBoundingClientRect();
+console.log(initialCoords);
+window.addEventListener('scroll', function () {
+  if (this.window.scrollY > initialCoords.top) {
+    nav.classList.add('sticky');
+  } else {
+    nav.classList.remove('sticky');
+  }
+}); */
+
+// implementing stciky nav bar using intersection observer api
+/* const obsObserverCallback = function (entries, observer) {
+  entries.forEach(entry => {
+    console.log(entry);
+  });
+};
+const observerOptions = {
+  root: null,
+  threshold: [0, 0.2],
+};
+const observer = new IntersectionObserver(obsObserverCallback, observerOptions);
+observer.observe(section1); */
+const navHeight = nav.getBoundingClientRect().height;
+const stickyNav = function (entries) {
+  const [entry] = entries;
+  if (!entry.isIntersecting) nav.classList.add('sticky');
+  else nav.classList.remove('sticky');
+};
+const headerObserver = new IntersectionObserver(stickyNav, {
+  root: null,
+  threshold: 0,
+  rootMargin: `-${navHeight}px`,
+});
+headerObserver.observe(headerElement);
+
+//revealing sections one by one
+const allSections = document.querySelectorAll('.section');
+const revealSection = function (entries, observer) {
+  const [entry] = entries;
+  if (!entry.isIntersecting) return;
+  entry.target.classList.remove('section--hidden');
+  observer.unobserve(entry.target);
+};
+const sectionObserver = new IntersectionObserver(revealSection, {
+  root: null,
+  threshold: 0.15,
+});
+allSections.forEach(section => {
+  sectionObserver.observe(section);
+  section.classList.add('section--hidden');
+});
 
 //experiments during learning
 

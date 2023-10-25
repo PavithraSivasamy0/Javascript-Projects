@@ -332,3 +332,16 @@ document.querySelector('.btn--close-cookie').addEventListener('click', () => {
 });
 
 message.style.backgroundColor = '#37383d'; */
+
+//lifecycle of DOM
+// document.addEventListener('DOMContentLoaded', () => {
+//   console.log('something');
+// });
+// window.addEventListener('load', () => {
+//   console.log('something-loaded');
+// });
+// window.addEventListener('beforeUnload', () => {
+//   e.preventDefault();
+//   console.log('e');
+//   e.returnValue = 'message';
+// });

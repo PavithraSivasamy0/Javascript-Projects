@@ -371,3 +371,33 @@ car1.accelerate();
 car2.accelerate();
 car1.brake();
 car2.brake();
+
+//prototypal inheritance using es6 classes
+class personCl {
+  constructor(make, speed) {
+    this.make = make;
+    this.speed = speed;
+  }
+  accelerate() {
+    this.speed = this.speed + 10;
+    console.log(`${this.make} going at the speed of ${this.speed}km/hr`);
+  }
+  break() {
+    this.speed = this.speed - 5;
+    console.log(`${this.make} going at the speed of ${this.speed}km/hr`);
+  }
+
+  get speedUs() {
+    return this.speed / 1.6;
+  }
+
+  set speedUs(speed) {
+    this.speed = speed * 1.6;
+  }
+}
+
+const bmw = new personCl('bmw', 90);
+console.log(bmw.speedUs);
+bmw.accelerate();
+bmw.speedUs = 50;
+bmw.accelerate();

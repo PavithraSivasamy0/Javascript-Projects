@@ -345,3 +345,29 @@ message.style.backgroundColor = '#37383d'; */
 //   console.log('e');
 //   e.returnValue = 'message';
 // });
+
+//prototypal inheritence using constructor function
+const Car = function (make, speed) {
+  this.make = make;
+  this.speed = speed;
+};
+
+Car.prototype.accelerate = function () {
+  this.speed = this.speed + 10;
+  console.log(`${this.make} going at the speed of ${this.speed}km/hr`);
+};
+
+Car.prototype.brake = function () {
+  this.speed = this.speed - 5;
+  console.log(`${this.make} going at the speed of ${this.speed}km/hr`);
+};
+
+const car1 = new Car('BMW', 120);
+const car2 = new Car('Mercedes', 90);
+
+car1.accelerate();
+car1.accelerate();
+car1.accelerate();
+car2.accelerate();
+car1.brake();
+car2.brake();

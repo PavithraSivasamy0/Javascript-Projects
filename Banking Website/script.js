@@ -347,37 +347,107 @@ message.style.backgroundColor = '#37383d'; */
 // });
 
 //prototypal inheritence using constructor function
-const Car = function (make, speed) {
-  this.make = make;
-  this.speed = speed;
-};
+// const Car = function (make, speed) {
+//   this.make = make;
+//   this.speed = speed;
+// };
 
-Car.prototype.accelerate = function () {
-  this.speed = this.speed + 10;
-  console.log(`${this.make} going at the speed of ${this.speed}km/hr`);
-};
+// Car.prototype.accelerate = function () {
+//   this.speed = this.speed + 10;
+//   console.log(`${this.make} going at the speed of ${this.speed}km/hr`);
+// };
 
-Car.prototype.brake = function () {
-  this.speed = this.speed - 5;
-  console.log(`${this.make} going at the speed of ${this.speed}km/hr`);
-};
+// Car.prototype.brake = function () {
+//   this.speed = this.speed - 5;
+//   console.log(`${this.make} going at the speed of ${this.speed}km/hr`);
+// };
 
-const car1 = new Car('BMW', 120);
-const car2 = new Car('Mercedes', 90);
+// const car1 = new Car('BMW', 120);
+// const car2 = new Car('Mercedes', 90);
 
-car1.accelerate();
-car1.accelerate();
-car1.accelerate();
-car2.accelerate();
-car1.brake();
-car2.brake();
+// car1.accelerate();
+// car1.accelerate();
+// car1.accelerate();
+// car2.accelerate();
+// car1.brake();
+// car2.brake();
 
 //prototypal inheritance using es6 classes
-class personCl {
+// class personCl {
+//   constructor(make, speed) {
+//     this.make = make;
+//     this.speed = speed;
+//   }
+//   accelerate() {
+//     this.speed = this.speed + 10;
+//     console.log(`${this.make} going at the speed of ${this.speed}km/hr`);
+//   }
+//   break() {
+//     this.speed = this.speed - 5;
+//     console.log(`${this.make} going at the speed of ${this.speed}km/hr`);
+//   }
+
+//   get speedUs() {
+//     return this.speed / 1.6;
+//   }
+
+//   set speedUs(speed) {
+//     this.speed = speed * 1.6;
+//   }
+// }
+
+// const bmw = new personCl('bmw', 90);
+// console.log(bmw.speedUs);
+// bmw.accelerate();
+// bmw.speedUs = 50;
+// bmw.accelerate();
+
+//inheritence using object.create()
+
+// const Car = function (make, speed) {
+//   this.make = make;
+//   this.speed = speed;
+// };
+
+// const EV = function (make, speed, charge) {
+//   Car.call(this, make, speed);
+//   this.charge = charge;
+// };
+// Car.prototype.accelerate = function () {
+//   this.speed = this.speed + 10;
+//   console.log(`${this.make} going at the speed of ${this.speed}km/hr`);
+// };
+// Car.prototype.break = function () {
+//   this.speed = this.speed - 5;
+//   console.log(`${this.make} going at the speed of ${this.speed}km/hr`);
+// };
+
+// EV.prototype = Object.create(Car.prototype);
+// EV.prototype.chargeBattery = function (chargeTo) {
+//   this.charge = chargeTo;
+// };
+
+// EV.prototype.accelerate = function () {
+//   this.speed += 20;
+//   this.charge--;
+//   console.log(
+//     `${this.make} is going at the speed of ${this.speed}km/hr with the charge of ${this.charge}`
+//   );
+// };
+
+// const tesla = new EV('Tesla', 120, 23);
+// tesla.chargeBattery(90);
+// console.log(tesla);
+// tesla.break();
+// tesla.accelerate();
+
+//inheritence using es6 classes
+class carCl {
   constructor(make, speed) {
     this.make = make;
     this.speed = speed;
   }
+
   accelerate() {
     this.speed = this.speed + 10;
     console.log(`${this.make} going at the speed of ${this.speed}km/hr`);
@@ -385,19 +455,41 @@ class personCl {
   break() {
     this.speed = this.speed - 5;
     console.log(`${this.make} going at the speed of ${this.speed}km/hr`);
-  }
-
-  get speedUs() {
-    return this.speed / 1.6;
-  }
-
-  set speedUs(speed) {
-    this.speed = speed * 1.6;
+    return this;
   }
 }
 
-const bmw = new personCl('bmw', 90);
-console.log(bmw.speedUs);
-bmw.accelerate();
-bmw.speedUs = 50;
-bmw.accelerate();
+class EVCL extends carCl {
+  #charge;
+  constructor(make, speed, charge) {
+    super(make, speed);
+    this.#charge = charge;
+  }
+
+  accelerate() {
+    this.speed += 20;
+    this.#charge--;
+    console.log(
+      `${this.make} is going at the speed of ${
+        this.speed
+      }km/hr with the charge of ${this.#charge}`
+    );
+    return this;
+  }
+
+  chargeBattery(chargeTo) {
+    this.#charge = chargeTo;
+    return this;
+  }
+}
+
+const rivan = new EVCL('rivan', 120, 23);
+rivan
+  .accelerate()
+  .accelerate()
+  .accelerate()
+  .break()
+  .chargeBattery(50)
+  .accelerate()
+  .break()
+  .chargeBattery();

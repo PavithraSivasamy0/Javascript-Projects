@@ -3,12 +3,15 @@
 const btn = document.querySelector('.btn-country');
 const countriesContainer = document.querySelector('.countries');
 
-//old way of raising request using XMLHttpRequest calls
-const renderCountry = data => {
+const renderError = function (msg) {
+  countriesContainer.insertAdjacentText('beforeend', msg);
+};
+
+const renderCountry = (data, isNeighbour = '') => {
   const [languages] = Object.values(data.languages);
   const [currency] = Object.values(data.currencies);
   const html = `
-  <article class="country">
+  <article class="country ${isNeighbour}">
     <img class="country__img" src="${data.flags.png}" />
     <div class="country__data">
       <h3 class="country__name">${data.name.common}</h3>
@@ -22,27 +25,53 @@ const renderCountry = data => {
   </article>
   `;
   countriesContainer.insertAdjacentHTML('beforeend', html);
-  countriesContainer.style.opacity = 1;
 };
 
-const getCountryData = function (country) {
-  const request = new XMLHttpRequest();
-  request.open('GET', `https://restcountries.com/v3.1/name/${country}`);
-  request.send();
-
-  request.addEventListener('load', function () {
-    const [data] = JSON.parse(this.responseText);
-    renderCountry(data);
-    const [neighbors] = data.borders;
-    const request2 = new XMLHttpRequest();
-    request2.open('GET', `https://restcountries.com/v3.1/alpha/${neighbors}`);
-    request2.send();
-    request2.addEventListener('load', function () {
-      const [data] = JSON.parse(this.responseText);
-      renderCountry(data);
-    });
+const getJsonData = (url, errorMrg = 'Something went wrong') => {
+  return fetch(url).then(response => {
+    if (!response.ok) {
+      throw new Error(`${errorMrg} ${response.status}`);
+    }
+    return response.json();
   });
 };
 
-getCountryData('portugal');
-getCountryData('usa');
+const getCountryData = function (country) {
+  // const request = new XMLHttpRequest();
+  // request.open('GET', `https://restcountries.com/v3.1/name/${country}`);
+  // request.send();
+  getJsonData(
+    `https://restcountries.com/v3.1/name/${country}`,
+    'country not found'
+  )
+    .then(data => {
+      renderCountry(data[0]);
+      let neighbors = data[0].borders[0];
+      if (!neighbors) throw new Error('neighbors not found');
+      return getJsonData(
+        `https://restcountries.com/v3.1/alpha/${neighbors}`,
+        'neighbor not found'
+      );
+    })
+    .then(data => renderCountry(data[0], 'neighbour'))
+    .catch(err => {
+      renderError(`Something went wrong 💥💥 ${err.message}. Try again!`);
+    })
+    .finally(() => {
+      countriesContainer.style.opacity = 1;
+    });
+
+  // const [neighbors] = data.borders;
+  // const request2 = new XMLHttpRequest();
+  // request2.open('GET', ``);
+  // request2.send();
+  // request2.addEventListener('load', function () {
+  //   const [data] = JSON.parse(this.responseText);
+  //   renderCountry(data);
+  // });
+  //});
+};
+
+btn.addEventListener('click', function () {
+  getCountryData('usa');
+});
